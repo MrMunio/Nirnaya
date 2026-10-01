@@ -52,6 +52,16 @@ class NirnayaEngine:
             if v is not None and v != "auto":
                 engine_kwargs[k] = v
 
+        try:
+            from ..config import settings
+            if settings.N_PERMS is not None:
+                engine_kwargs["n_perms"] = settings.N_PERMS
+        except Exception:
+            import os
+            env_val = os.getenv("NIRNAYA_N_PERMS")
+            if env_val is not None and env_val.strip() != "":
+                engine_kwargs["n_perms"] = int(env_val)
+
         model_path = cfg.get("resolved_model_path", model_name)
         engine_kwargs.pop("backend", None)
         engine_kwargs.pop("model_name", None)
@@ -127,8 +137,19 @@ class NirnayaEngine:
         self.tok = tokenizer
         self.model = model.to(resolved_device).eval()
         self.device = resolved_device
-        resolved_perms = kwargs.get("n_perms") or n_perms or cfg.get("n_perms", 1)
-        self.n_perms = max(1, resolved_perms)
+        try:
+            from ..config import settings
+            env_perms = settings.N_PERMS
+        except Exception:
+            import os
+            env_val = os.getenv("NIRNAYA_N_PERMS")
+            env_perms = int(env_val) if env_val is not None and env_val.strip() != "" else None
+
+        if env_perms is not None:
+            self.n_perms = max(1, env_perms)
+        else:
+            resolved_perms = kwargs.get("n_perms") or n_perms or cfg.get("n_perms", 1)
+            self.n_perms = max(1, resolved_perms)
         self.calibrator = calibrator
         self.dedicated_prompts = cfg.get("dedicated_prompts", dedicated_prompts)
 

@@ -98,8 +98,17 @@ class LlamaCppEngine:
             raise FileNotFoundError(f"GGUF model not found at {resolved_path}")
 
         self.model_path = resolved_path
-        self.model_name = os.path.basename(resolved_path)
-        self.n_perms = max(1, n_perms)
+        try:
+            from ..config import settings
+            env_perms = settings.N_PERMS
+        except Exception:
+            env_val = os.getenv("NIRNAYA_N_PERMS")
+            env_perms = int(env_val) if env_val is not None and env_val.strip() != "" else None
+
+        if env_perms is not None:
+            self.n_perms = max(1, env_perms)
+        else:
+            self.n_perms = max(1, n_perms)
         self.calibrator = calibrator
         self.dedicated_prompts = dedicated_prompts
         self._spaces: Dict[tuple, LabelSpace] = {}

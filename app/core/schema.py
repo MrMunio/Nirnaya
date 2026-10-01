@@ -103,22 +103,22 @@ class Answer:
     def to_dict(self) -> Dict[str, Any]:
         return asdict(self)
 
-    def to_jev(self, question: Optional[Question] = None) -> Dict[str, Any]:
+    def to_jev(self, question: Optional[Question] = None, precision: int = 3) -> Dict[str, Any]:
         """Format answer strictly adhering to TypeSafe Jev API response contract."""
         if self.qtype == "choice":
-            probs_dict = {lbl: float(p) for lbl, p in zip(self.labels, self.probs)}
+            probs_dict = {lbl: round(float(p), precision) for lbl, p in zip(self.labels, self.probs)}
             return {
                 "type": "choice",
                 "choice": self.value,
-                "confidence": round(float(self.confidence), 4),
+                "confidence": round(float(self.confidence), precision),
                 "probabilities": probs_dict,
             }
         elif self.qtype == "score":
-            probs_dict = {str(lbl): float(p) for lbl, p in zip(self.labels, self.probs)}
+            probs_dict = {str(lbl): round(float(p), precision) for lbl, p in zip(self.labels, self.probs)}
             res: Dict[str, Any] = {
                 "type": "score",
-                "score": round(float(self.value), 4),
-                "confidence": round(float(self.confidence), 4),
+                "score": round(float(self.value), precision),
+                "confidence": round(float(self.confidence), precision),
                 "probabilities": probs_dict,
             }
             if question is not None and isinstance(question, ScoreQuestion):
@@ -127,7 +127,7 @@ class Answer:
         else:  # noul
             return {
                 "type": "noul",
-                "noul": round(float(self.value), 4),
+                "noul": round(float(self.value), precision),
             }
 
 

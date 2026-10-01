@@ -46,6 +46,15 @@ class Settings:
     )
     WARMUP_ON_STARTUP: bool = os.getenv("WARMUP_ON_STARTUP", "false").lower() in ("true", "1", "yes")
 
+    # Cyclic Permutation Pooling for Choice Questions
+    # Set to 1 to cap/disable permutations (single evaluation pass, no cyclic rotation)
+    # If not set, defaults to the model's configured n_perms (e.g., 3)
+    N_PERMS: Optional[int] = (
+        int(os.getenv("NIRNAYA_N_PERMS"))
+        if os.getenv("NIRNAYA_N_PERMS") is not None and os.getenv("NIRNAYA_N_PERMS").strip() != ""
+        else None
+    )
+
     # Security & SQLite Database
     DB_PATH: str = os.getenv("NIRNAYA_DB_PATH", "nirnaya_server/data/nirnaya.db")
     INITIAL_ADMIN_KEY: str = os.getenv("INITIAL_ADMIN_KEY", "nir_live_root_secret_key_change_me")

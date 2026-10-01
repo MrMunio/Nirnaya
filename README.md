@@ -6,7 +6,7 @@
 [![SQLite](https://img.shields.io/badge/SQLite-WAL--Mode-003B57.svg)](https://www.sqlite.org/)
 [![Contract](https://img.shields.io/badge/API-TypeSafe--Jev--Compatible-success.svg)](https://api.typesafe.ai)
 
-**Nirnaya Server** is a production-grade, local-first **System-One typed probabilistic decision microservice** implementing exact API parity with **TypeSafe AI Jev** (`POST /v1/systemone`). It eliminates auto-regressive decoding loops, stop tokens, and JSON validation errors by restricting evaluation strictly to the single next-token readout over categorical, continuous rubric, and binary decisions.
+**Nirnaya** (Sanskrit: **निर्णय**, *nirṇaya* — literally meaning **"conclusive decision"**, **"ascertainment"**, or **"verdict arrived at through inquiry and reason"**) **Server** is a production-grade, local-first **System-One typed probabilistic decision microservice** implementing exact API parity with **TypeSafe AI Jev** (`POST /v1/systemone`). It eliminates auto-regressive decoding loops, stop tokens, and JSON validation errors by restricting evaluation strictly to the single next-token readout over categorical, continuous rubric, and binary decisions.
 
 ---
 
@@ -86,8 +86,10 @@ NIRNAYA_DB_PATH=data/nirnaya.db
 INITIAL_ADMIN_KEY=nir_live_root_secret_key_change_me
 REQUIRE_AUTH=true
 
-# Performance
+# Performance & Permutation Pooling
 WARMUP_ON_STARTUP=false
+# Cyclic Permutation Pooling for Choice Questions (1 = disabled/fastest, 3 = standard 3-way rotation)
+NIRNAYA_N_PERMS=1
 ```
 
 ---

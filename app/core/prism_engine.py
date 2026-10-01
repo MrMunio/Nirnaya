@@ -89,7 +89,18 @@ class PrismLlamaEngine:
         self.model_name = model_name
         self.port = port
         self.base_url = server_url or f"http://127.0.0.1:{port}"
-        self.n_perms = max(1, n_perms)
+        try:
+            from ..config import settings
+            env_perms = settings.N_PERMS
+        except Exception:
+            import os
+            env_val = os.getenv("NIRNAYA_N_PERMS")
+            env_perms = int(env_val) if env_val is not None and env_val.strip() != "" else None
+
+        if env_perms is not None:
+            self.n_perms = max(1, env_perms)
+        else:
+            self.n_perms = max(1, n_perms)
         self.calibrator = calibrator
         self.server_process: Optional[subprocess.Popen] = None
         self._spaces: Dict[tuple, LabelSpace] = {}

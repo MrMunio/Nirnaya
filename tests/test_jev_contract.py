@@ -1,14 +1,32 @@
 """Unit tests verifying strict TypeSafe AI Jev contract serialization and question parsing."""
 import pytest
-from nirnaya_server.app.core.schema import (
-    Answer,
-    ChoiceQuestion,
-    NoulQuestion,
-    Prediction,
-    ScoreQuestion,
-    parse_question,
-    parse_questions,
-)
+import sys
+from pathlib import Path
+
+# Support running directly from nirnaya_server or parent workspace
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent))
+
+try:
+    from app.core.schema import (
+        Answer,
+        ChoiceQuestion,
+        NoulQuestion,
+        Prediction,
+        ScoreQuestion,
+        parse_question,
+        parse_questions,
+    )
+except ImportError:
+    from nirnaya_server.app.core.schema import (
+        Answer,
+        ChoiceQuestion,
+        NoulQuestion,
+        Prediction,
+        ScoreQuestion,
+        parse_question,
+        parse_questions,
+    )
 
 
 def test_parse_choice_with_criteria():
@@ -91,7 +109,7 @@ def test_answer_to_jev_score():
     )
     jev = ans.to_jev(question=q)
     assert jev["type"] == "score"
-    assert jev["score"] == 1.8542
+    assert jev["score"] == 1.854
     assert jev["confidence"] == 0.80
     assert jev["probabilities"]["2"] == 0.80
     assert "legend" in jev
@@ -116,7 +134,7 @@ def test_answer_to_jev_noul():
     )
     jev = ans.to_jev()
     assert jev["type"] == "noul"
-    assert jev["noul"] == 0.9421
+    assert jev["noul"] == 0.942
 
 
 def test_prediction_to_jev_payload():
