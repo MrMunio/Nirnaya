@@ -1,0 +1,38 @@
+# ==============================================================================
+# Nirnaya Decision Platform - Linux NVIDIA CUDA GPU (CUDA 12.1+)
+# ==============================================================================
+services:
+  nirnaya-gpu:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.cuda
+    image: nirnaya-platform:cuda
+    container_name: nirnaya-platform-gpu
+    ports:
+      - "8000:8000"   # FastAPI Backend (REST & Swagger /docs)
+      - "8501:8501"   # Streamlit Showcase & Decision Studio UI
+    environment:
+      - NIRNAYA_HOST=0.0.0.0
+      - NIRNAYA_PORT=8000
+      - NIRNAYA_ENV=production
+      - NIRNAYA_DEFAULT_MODEL=qwen3.5-4b-gguf
+      - NIRNAYA_DB_PATH=/app/nirnaya_server/data/nirnaya.db
+      - INITIAL_ADMIN_KEY=nir_live_root_secret_key_change_me
+      - REQUIRE_AUTH=true
+      # Unified Process Orchestration
+      - SERVICE_TYPE=all
+      - STREAMLIT_PORT=8501
+      - NIRNAYA_API_TIMEOUT_SECONDS=300
+      - STREAMLIT_AUTH_USERNAME=admin
+      - STREAMLIT_AUTH_PASSWORD=nirnaya
+    volumes:
+      - ./models:/app/models
+      - ./data:/app/nirnaya_server/data
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    restart: unless-stopped

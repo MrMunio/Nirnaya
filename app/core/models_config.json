@@ -1,0 +1,85 @@
+{
+  "$schema": "./models_config.schema.json",
+  "version": "1.0",
+  "default_model": "qwen3-4b",
+  "models": {
+    "qwen2.5-0.5b": {
+      "name": "Qwen2.5-0.5B-Instruct",
+      "description": "Ultra-lightweight baseline dense model (~0.49B parameters)",
+      "backend": "transformers",
+      "model_id": "Qwen/Qwen2.5-0.5B-Instruct",
+      "dtype": "float32",
+      "device": "auto",
+      "enable_thinking": false,
+      "dedicated_prompts": true,
+      "n_perms": 3
+    },
+    "qwen2.5-3b": {
+      "name": "Qwen2.5-3B-Instruct",
+      "description": "3B instruction-tuned dense model (100% choice accuracy)",
+      "backend": "transformers",
+      "model_id": "Qwen/Qwen2.5-3B-Instruct",
+      "dtype": "bfloat16",
+      "device": "auto",
+      "enable_thinking": false,
+      "dedicated_prompts": true,
+      "n_perms": 1
+    },
+    "qwen3-4b": {
+      "name": "Qwen3-4B",
+      "description": "Qwen3 4B causal dense transformer (89.5% overall acc, 5.7% ECE)",
+      "backend": "transformers",
+      "model_id": "Qwen/Qwen3-4B",
+      "dtype": "bfloat16",
+      "device": "auto",
+      "enable_thinking": false,
+      "dedicated_prompts": true,
+      "n_perms": 1
+    },
+    "bonsai-27b": {
+      "name": "PrismML Bonsai-27B (1-Bit Q1_0)",
+      "description": "27B ternary/binary quantized model (93.9% overall acc, matches TypeSafe AI)",
+      "backend": "prism_llama",
+      "model_path": "models/bonsai-27b/Bonsai-27B-Q1_0.gguf",
+      "hf_repo": "prism-ml/Bonsai-27B-gguf",
+      "filename": "Bonsai-27B-Q1_0.gguf",
+      "server_bin": "bin/prism_llama/llama-server.exe",
+      "port": 8088,
+      "n_ctx": 4096,
+      "n_gpu_layers": "auto",
+      "enable_thinking": false,
+      "dedicated_prompts": true,
+      "n_perms": 1
+    },
+    "qwen3.5-4b-gguf": {
+      "name": "Unsloth Qwen3.5-4B Dynamic GGUF",
+      "description": "Unsloth Dynamic 4-bit (UD-Q4_K_XL) Qwen3.5 GGUF for local CPU/GPU execution",
+      "backend": "llama_cpp",
+      "model_path": "models/qwen3.5-4b/Qwen3.5-4B-UD-Q4_K_XL.gguf",
+      "server_bin": "bin/prism_llama/llama-server.exe",
+      "port": 8089,
+      "hf_repo": "unsloth/Qwen3.5-4B-GGUF",
+      "filename": "Qwen3.5-4B-UD-Q4_K_XL.gguf",
+      "local_dir": "models/qwen3.5-4b",
+      "n_ctx": 8192,
+      "n_gpu_layers": "auto",
+      "enable_thinking": false,
+      "dedicated_prompts": true,
+      "n_perms": 1
+    },
+    "qwen3-0.6b-gguf": {
+      "name": "Qwen3-0.6B-GGUF",
+      "description": "Ultra-lightweight 0.6B GGUF model for CPU wiring tests & deployment",
+      "backend": "llama_cpp",
+      "model_path": "models/qwen3-0.6b/Qwen3-0.6B-Q8_0.gguf",
+      "hf_repo": "Qwen/Qwen3-0.6B-GGUF",
+      "filename": "Qwen3-0.6B-Q8_0.gguf",
+      "local_dir": "models/qwen3-0.6b",
+      "n_ctx": 4096,
+      "n_gpu_layers": 0,
+      "enable_thinking": false,
+      "dedicated_prompts": true,
+      "n_perms": 1
+    }
+  }
+}
